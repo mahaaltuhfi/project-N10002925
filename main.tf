@@ -71,3 +71,40 @@ module "vmlinux" {
     "2925-linux-vm3" = "3"
   }
 }
+
+module "vmwindows" {
+  source               = "./modules/vmwindows-2925"
+  rg_name              = module.rgroup.rg_name
+  location             = module.rgroup.location
+  subnet_id            = module.network.subnet_id
+  boot_diag_uri        = module.common.sa_blob_endpoint
+  avset_name           = "2925-win-avset"
+  vm_count             = 1
+  vm_name_prefix       = "2925-win-vm"
+  vm_size              = "Standard_F2als_v7"
+  admin_username       = "n10002925"
+  admin_password       = "Humber@2925Pass!"
+  os_disk_caching      = "ReadWrite"
+  os_disk_storage_type = "StandardSSD_LRS"
+  image_publisher      = "MicrosoftWindowsServer"
+  image_offer          = "WindowsServer"
+  image_sku            = "2022-datacenter-azure-edition"
+  image_version        = "latest"
+  tags                 = local.common_tags
+}
+
+module "datadisk" {
+  source            = "./modules/datadisk-2925"
+  rg_name           = module.rgroup.rg_name
+  location          = module.rgroup.location
+  disk_size_gb      = 10
+  disk_storage_type = "StandardSSD_LRS"
+  disk_caching      = "ReadWrite"
+  lun               = 0
+  tags              = local.common_tags
+
+  vm_ids = merge(
+    module.vmlinux.vm_ids,
+    { for i, id in module.vmwindows.vm_ids : "2925-win-vm${i + 1}" => id }
+  )
+}
