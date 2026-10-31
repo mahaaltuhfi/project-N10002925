@@ -78,7 +78,7 @@ module "vmwindows" {
   location             = module.rgroup.location
   subnet_id            = module.network.subnet_id
   boot_diag_uri        = module.common.sa_blob_endpoint
-  avset_name           = "2925-win-avset"
+    avset_id             = module.vmlinux.avset_id
   vm_count             = 1
   vm_name_prefix       = "2925-win-vm"
   vm_size              = "Standard_F2als_v7"

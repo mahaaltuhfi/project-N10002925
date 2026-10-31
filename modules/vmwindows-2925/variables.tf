@@ -14,7 +14,7 @@ variable "boot_diag_uri" {
   type = string
 }
 
-variable "avset_name" {
+variable "avset_id" {
   type = string
 }
 

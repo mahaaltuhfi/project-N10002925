@@ -1,13 +1,3 @@
-resource "azurerm_availability_set" "avset" {
-  name                         = var.avset_name
-  location                     = var.location
-  resource_group_name          = var.rg_name
-  platform_fault_domain_count  = 2
-  platform_update_domain_count = 5
-  managed                      = true
-  tags                         = var.tags
-}
-
 resource "azurerm_public_ip" "pip" {
   count               = var.vm_count
   name                = "${var.vm_name_prefix}${count.index + 1}-pip"
@@ -41,7 +31,7 @@ resource "azurerm_windows_virtual_machine" "vm" {
   location              = var.location
   resource_group_name   = var.rg_name
   size                  = var.vm_size
-  availability_set_id   = azurerm_availability_set.avset.id
+  availability_set_id   = var.avset_id
   admin_username        = var.admin_username
   admin_password        = var.admin_password
   network_interface_ids = [azurerm_network_interface.nic[count.index].id]

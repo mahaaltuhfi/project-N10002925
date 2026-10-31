@@ -25,3 +25,6 @@ output "nic_ids" {
 output "ipconfig_names" {
   value = { for k, nic in azurerm_network_interface.nic : k => nic.ip_configuration[0].name }
 }
+output "avset_id" {
+  value = azurerm_availability_set.avset.id
+}
