@@ -108,3 +108,35 @@ module "datadisk" {
     { for i, id in module.vmwindows.vm_ids : "2925-win-vm${i + 1}" => id }
   )
 }
+
+module "loadbalancer" {
+  source            = "./modules/loadbalancer-2925"
+  rg_name           = module.rgroup.rg_name
+  location          = module.rgroup.location
+  lb_name           = "2925-LB"
+  lb_pip_name       = "2925-LB-pip"
+  frontend_name     = "2925-LB-frontend"
+  backend_pool_name = "2925-LB-backendpool"
+  probe_name        = "2925-LB-probe"
+  probe_port        = 80
+  rule_name         = "2925-LB-rule-http"
+  frontend_port     = 80
+  backend_port      = 80
+  nic_ids           = module.vmlinux.nic_ids
+  ipconfig_names    = module.vmlinux.ipconfig_names
+  tags              = local.common_tags
+}
+
+module "database" {
+  source                = "./modules/database-2925"
+  rg_name               = module.rgroup.rg_name
+  location              = module.rgroup.location
+  db_name               = "n2925-pgsql-maha"
+  db_version            = "16"
+  admin_username        = "n2925admin"
+  admin_password        = "Humber@2925Db!"
+  sku_name              = "B_Standard_B1ms"
+  storage_mb            = 32768
+  backup_retention_days = 7
+  tags                  = local.common_tags
+}

@@ -57,3 +57,14 @@ output "windows_public_ips" {
 output "data_disk_names" {
   value = module.datadisk.disk_names
 }
+
+output "load_balancer_name" {
+  value = module.loadbalancer.lb_name
+}
+
+output "load_balancer_public_ip" {
+  value = module.loadbalancer.lb_public_ip
+}
+output "database_name" {
+  value = module.database.db_name
+}
