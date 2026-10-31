@@ -46,3 +46,28 @@ module "common" {
   sa_replication     = "LRS"
   tags               = local.common_tags
 }
+
+module "vmlinux" {
+  source               = "./modules/vmlinux-2925"
+  rg_name              = module.rgroup.rg_name
+  location             = module.rgroup.location
+  subnet_id            = module.network.subnet_id
+  boot_diag_uri        = module.common.sa_blob_endpoint
+  vm_size              = "Standard_F1als_v7"
+  admin_username       = "n10002925"
+  public_key_path      = "~/.ssh/id_rsa.pub"
+  private_key_path     = "~/.ssh/id_rsa"
+  os_disk_caching      = "ReadWrite"
+  os_disk_storage_type = "StandardSSD_LRS"
+  image_publisher      = "Canonical"
+  image_offer          = "ubuntu-24_04-lts"
+  image_sku            = "server"
+  image_version        = "latest"
+  tags                 = local.common_tags
+  avset_name           = "2925-linux-avset"
+  linux_vms = {
+    "2925-linux-vm1" = "1"
+    "2925-linux-vm2" = "2"
+    "2925-linux-vm3" = "3"
+  }
+}

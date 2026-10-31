@@ -21,3 +21,19 @@ output "recovery_services_vault_name" {
 output "storage_account_name" {
   value = module.common.sa_name
 }
+
+output "linux_hostnames" {
+  value = module.vmlinux.hostnames
+}
+
+output "linux_fqdns" {
+  value = module.vmlinux.fqdns
+}
+
+output "linux_private_ips" {
+  value = module.vmlinux.private_ips
+}
+
+output "linux_public_ips" {
+  value = module.vmlinux.public_ips
+}
