@@ -13,3 +13,21 @@ module "rgroup" {
   location = "canadacentral"
   tags     = local.common_tags
 }
+module "network" {
+  source                  = "./modules/network-2925"
+  rg_name                 = module.rgroup.rg_name
+  location                = module.rgroup.location
+  vnet_name               = "2925-VNET"
+  vnet_address_space      = ["10.0.0.0/16"]
+  subnet_name             = "2925-SUBNET"
+  subnet_address_prefixes = ["10.0.1.0/24"]
+  nsg_name                = "2925-NSG"
+  tags                    = local.common_tags
+
+  inbound_rules = {
+    SSH   = { port = 22,   priority = 100 }
+    RDP   = { port = 3389, priority = 110 }
+    WinRM = { port = 5985, priority = 120 }
+    HTTP  = { port = 80,   priority = 130 }
+  }
+}
